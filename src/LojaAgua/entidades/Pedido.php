@@ -19,7 +19,14 @@ private $id;
  */
 private $hora;
 
+/**
+	 * @ManyToOne(targetEntity="Usuario")
+	 * @JoinColumn(name="usuario_id", referencedColumnName="id")
+	 */
 private $usuario;
+/**
+* @OneToMany(targetEntity="Item", mappedBy="pedido",cascade={"persist","remove"})
+**/
 private $itens;
 
 public function __construct($id = 0,$hora = "0000-00-00 00:00:00",$usuario = 0,$itens= array()){

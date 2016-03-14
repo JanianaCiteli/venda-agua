@@ -1,10 +1,32 @@
 <?php
 namespace LojaAgua\entidades;
+
+/**
+ * @Entity
+ * @Table(name="item")
+ */
 class Item{
 
+  /**
+  *	@var integer @Id
+  *      @Column(name="id", type="integer")
+  *      @GeneratedValue(strategy="AUTO")
+  */
 private $id;
+/**
+	 * @ManyToOne(targetEntity="Pedido")
+	 * @JoinColumn(name="pedido_id", referencedColumnName="id")
+	 */
 private $pedido;
+/**
+ *
+ * @var string @Column(type="string", length=255)
+ */
 private $produto;
+/**
+*	     @var integer
+*      @Column(type="integer")
+*/
 private $quantidade;
 
 public function __construct($id = 0,$pedido= null,$produto= "" ,$quantidade = 0){
