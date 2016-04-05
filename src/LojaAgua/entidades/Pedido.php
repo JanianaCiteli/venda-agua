@@ -20,7 +20,7 @@ private $id;
 private $hora;
 
 /**
-	 * @ManyToOne(targetEntity="Usuario")
+	 * @ManyToOne(targetEntity="Usuario",cascade={"persist"})
 	 * @JoinColumn(name="usuario_id", referencedColumnName="id")
 	 */
 private $usuario;
@@ -29,7 +29,7 @@ private $usuario;
 **/
 private $itens;
 
-public function __construct($id = 0,$hora = "0000-00-00 00:00:00",$usuario = 0,$itens= array()){
+public function __construct($id = 0,$hora = null,$usuario = 0,$itens= array()){
 $this->id = $id;
 $this->hora = $hora;
 $this->usuario = $usuario;

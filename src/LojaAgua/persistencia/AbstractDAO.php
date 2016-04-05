@@ -1,31 +1,57 @@
 <?php
 
-namespace LojaAgua\core;
+namespace LojaAgua\persistencia;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 
 abstract class AbstractDAO {
-	protected $repo;
-	/**
-	 *
-	 * @var \Doctrine\ORM\EntityManager
-	 */
-	private $entityManager = null;
-	public function __construct($repo) {
-		$this->repo = $repo;
-		$this->entityManager = $this->createEntityManager ();
+
+	public $entityManager;
+	private $entityPath;
+
+	public function __construct($entityPath) {
+			$this->entityPath = $entityPath;
+			$this->entityManager = $this->createEntityManager ();
+		}
+	public function createEntityManager() {
+
+		$path = array (
+		    'LojaAgua/entidades'
+		);
+		$devMode = true;
+
+		$config = Setup::createAnnotationMetadataConfiguration ( $path, $devMode );
+
+		$connectionOptions =  array (
+		    'dbname' => 'vendaagua',
+		    'user' => 'root',
+		    'password' => '',
+		    'host' => 'localhost',
+		    'driver' => 'pdo_mysql'
+		);
+
+		//Passo 3 - Objeto de persistencia
+		return EntityManager::create ( $connectionOptions, $config );
 	}
-	public function persist($object) {
-		$this->entityManager->persist ( $object );
-		$this->entityManager->flush ();
+
+	public function insert($obj){
+		$this->entityManager->persist($obj);
+		$this->entityManager->flush();
 	}
-	public function findById($id) {
-		$data =  $this->entityManager ->find ($this->repo , $id ) ;
-		return $data;
+	public function update($obj){
+		$this->entityManager->merge($obj);
+		$this->entityManager->flush();
 	}
-	public function findAll($object=null) {
-		$collection = $this->entityManager ->getRepository ( $this->repo )->findAll ();
+	public function delete($obj){
+		$this->entityManager->remove($obj);
+		$this->entityManager->flush();
+	}
+	public function findById($id){
+		return $this->entityManager ->find ( $this->entityPath ,$id) ;
+	}
+	public function findAll(){
+		$collection = $this->entityManager ->getRepository ( $this->entityPath )->findAll ();
 
 		$data = array ();
 		foreach ( $collection as $obj ) {
@@ -33,37 +59,5 @@ abstract class AbstractDAO {
 		}
 
 		return $data;
-	}
-	public function delete($object) {
-		$this->entityManager->remove ( $object );
-		$this->entityManager->flush ();
-	}
-	public function createEntityManager() {
-		$path = array (
-				'LojaAgua/entidades'
-		);
-		$devMode = true;
-
-		$config = Setup::createAnnotationMetadataConfiguration ( $path, $devMode );
-
-		$connectionOptions =  array (
-        'dbname' => 'vendaagua',
-        'user' => 'root',
-        'password' => '',
-        'host' => 'localhost',
-        'driver' => 'pdo_mysql'
-    );
-
-
-		return EntityManager::create ( $connectionOptions, $config );
-	}
-	public function getEntityManager(){
-		return $this->entityManager;
-	}
-	abstract public function validateType($obj);
-
-	public function update( $object) {
-		$this->getEntityManager ()->merge( $object );
-		$this->getEntityManager ()->flush ();
 	}
 }

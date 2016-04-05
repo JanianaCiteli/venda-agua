@@ -2,34 +2,21 @@
 $loader = require __DIR__ . '/vendor/autoload.php';
 
 use LojaAgua\entidades\Usuario;
-//Passo 1 - Incluir Arquivos
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
+use LojaAgua\entidades\Pedido;
+use LojaAgua\persistencia\UsuarioDAO;
+use LojaAgua\persistencia\PedidoDAO;
 
-//Passo 2 - Configuração
-$path = array (
-    'LojaAgua/entidades'
-);
-$devMode = true;
+$user = new Usuario(0,"ivanknow3@gmail.com","123456","Rua xy");
+$dao = new UsuarioDAO();
 
-$config = Setup::createAnnotationMetadataConfiguration ( $path, $devMode );
+$dao->insert($user);
 
-$connectionOptions =  array (
-    'dbname' => 'vendaagua',
-    'user' => 'root',
-    'password' => '',
-    'host' => 'localhost',
-    'driver' => 'pdo_mysql'
-);
+$time = new DateTime("now");
+$pedido = new Pedido(0,$time,$user,array());
+$dao2 = new PedidoDAO();
 
-//Passo 3 - Objeto de persistencia
-$entityManager = EntityManager::create ( $connectionOptions, $config );
+$dao2->insert($pedido);
 
-$u = $entityManager ->find ('LojaAgua\entidades\Usuario' ,2) ;
 
-$entityManager->remove($u);
-$entityManager->flush();
-
-echo "remove ".$u->getEmail();
 
 ?>
