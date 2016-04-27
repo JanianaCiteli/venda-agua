@@ -6,17 +6,37 @@ use LojaAgua\entidades\Pedido;
 use LojaAgua\persistencia\UsuarioDAO;
 use LojaAgua\persistencia\PedidoDAO;
 
-$user = new Usuario(0,"ivanknow3@gmail.com","123456","Rua xy");
-$dao = new UsuarioDAO();
-
-$dao->insert($user);
-
-$time = new DateTime("now");
-$pedido = new Pedido(0,$time,$user,array());
-$dao2 = new PedidoDAO();
-
-$dao2->insert($pedido);
+$app = new \Slim\Slim ();
 
 
+
+$app->get ( '/', function () {
+	echo json_encode ( [
+			"api" => "Venda de Agua",
+			"version" => "1.0.0"
+	] );
+} );
+
+$app->get ( '/test(/(:test))', function ($test = "nada") {
+	echo "test:" . $test;
+} );
+
+$app->get ( '/usuario(/(:id))', function ($id = null) {
+echo "GET\n";
+});
+
+$app->post ( '/usuario(/)', function () {
+echo "POST\n";
+} );
+
+$app->put ( '/usuario(/))', function () {
+echo "PUT\n";
+} );
+
+$app->delete ( '/usuario/:id', function ($id = null) {
+	echo "DELETE\n";
+} );
+
+$app->run ();
 
 ?>
