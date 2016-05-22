@@ -3,12 +3,12 @@ $loader = require __DIR__ . '/vendor/autoload.php';
 
 use LojaAgua\entidades\Usuario;
 use LojaAgua\entidades\Pedido;
-use LojaAgua\persistencia\UsuarioDAO;
-use LojaAgua\persistencia\PedidoDAO;
+use LojaAgua\controlador\UsuarioController;
+use LojaAgua\controlador\PedidoController;
 
 $app = new \Slim\Slim ();
 
-$usuarioDao = new UsuarioDAO();
+$usuarioCtrl = new UsuarioController();
 
 $app->get ( '/', function () {
 	echo json_encode ( [
@@ -18,12 +18,15 @@ $app->get ( '/', function () {
 } );
 
 
-$app->get ( '/usuario(/(:id))', function ($id = null) use  ($usuarioDao){
-echo json_encode($usuarioDao->findById($id)->toArray());
+$app->get ( '/usuario(/(:id))', function ($id = null) use  ($usuarioCtrl){
+echo json_encode($usuarioCtrl->get($id));
 });
 
-$app->post ( '/usuario(/)', function () use  ($usuarioDao){
-echo "POST test\n";
+$app->post ( '/usuario(/)', function () use  ($usuarioCtrl){
+	$app = \Slim\Slim::getInstance ();
+	$json = json_decode ( $app->request ()->getBody ());
+	echo json_encode ($usuarioCtrl->insert( $json ) );
+
 } );
 
 $app->put ( '/usuario(/)', function () {
