@@ -8,7 +8,7 @@ use LojaAgua\persistencia\PedidoDAO;
 
 $app = new \Slim\Slim ();
 
-
+$usuarioDao = new UsuarioDAO();
 
 $app->get ( '/', function () {
 	echo json_encode ( [
@@ -17,23 +17,20 @@ $app->get ( '/', function () {
 	] );
 } );
 
-$app->get ( '/test(/(:test))', function ($test = "nada") {
-	echo "test:" . $test;
-} );
 
-$app->get ( '/usuario(/(:id))', function ($id = null) {
-echo "GET\n";
+$app->get ( '/usuario(/(:id))', function ($id = null) use  ($usuarioDao){
+echo json_encode($usuarioDao->findById($id)->toArray());
 });
 
-$app->post ( '/usuario(/)', function () {
-echo "POST\n";
+$app->post ( '/usuario(/)', function () use  ($usuarioDao){
+echo "POST test\n";
 } );
 
-$app->put ( '/usuario(/))', function () {
+$app->put ( '/usuario(/)', function () {
 echo "PUT\n";
 } );
 
-$app->delete ( '/usuario/:id', function ($id = null) {
+$app->delete ( '/usuario/:id', function () {
 	echo "DELETE\n";
 } );
 
