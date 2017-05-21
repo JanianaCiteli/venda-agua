@@ -9,6 +9,7 @@ use LojaAgua\controlador\PedidoController;
 $app = new \Slim\Slim ();
 
 $usuarioCtrl = new UsuarioController();
+$pedidoCtrl = new PedidoController();
 
 $app->get ( '/', function () {
 	echo json_encode ( [
@@ -34,6 +35,25 @@ echo "PUT\n";
 } );
 
 $app->delete ( '/usuario/:id', function () {
+	echo "DELETE\n";
+} );
+
+$app->get ( '/pedido(/(:id))', function ($id = null) use  ($pedidoCtrl){
+echo json_encode($pedidoCtrl->get($id));
+});
+
+$app->post ( '/pedido(/)', function () use  ($pedidoCtrl){
+	$app = \Slim\Slim::getInstance ();
+	$json = json_decode ( $app->request ()->getBody ());
+	echo json_encode ($pedidoCtrl->insert( $json ) );
+
+} );
+
+$app->put ( '/pedido(/)', function () {
+echo "PUT\n";
+} );
+
+$app->delete ( '/pedido/:id', function () {
 	echo "DELETE\n";
 } );
 

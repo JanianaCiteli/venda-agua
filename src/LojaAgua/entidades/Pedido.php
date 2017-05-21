@@ -5,7 +5,7 @@ namespace LojaAgua\entidades;
  * @Entity
  * @Table(name="pedido")
  */
-class Pedido{
+class Pedido extends Entidade{
 
   /**
   *	@var integer @Id
@@ -113,5 +113,14 @@ public function toString(){
 
  return "  [id:" .$this->id. "]  [hora:" .$this->hora. "]  [usuario:" .$this->usuario. "]  [itens:" .$this->itens. "]  " ;
 }
+
+ public function toArray(){
+   return [
+  "id"=>$this->id,
+   "hora"=>$this->hora,
+   "usuario"=>$this->usuario->toArray(),
+   "itens"=>$this->itens
+   ];
+ }
 
 }
