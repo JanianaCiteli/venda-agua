@@ -1,11 +1,12 @@
 <?php
 namespace LojaAgua\entidades;
 
+ use LojaAgua\entidades\Entidade;
 /**
  * @Entity
  * @Table(name="item")
  */
-class Item{
+class Item extends Entidade{
 
   /**
   *	@var integer @Id
@@ -40,7 +41,6 @@ $this->quantidade = $quantidade;
 public static function construct($array){
 $obj = new Item();
 $obj->setId( $array['id']);
-$obj->setPedido( $array['pedido']);
 $obj->setProduto( $array['produto']);
 $obj->setQuantidade( $array['quantidade']);
 return $obj;
@@ -113,5 +113,12 @@ public function toString(){
 
  return "  [id:" .$this->id. "]  [pedido:" .$this->pedido. "]  [produto:" .$this->produto. "]  [quantidade:" .$this->quantidade. "]  " ;
 }
+
+ public function toArray(){
+   return [
+  "id"=>$this->id,
+   "produto"=>$this->produto,
+   "quantidade"=>$this->quantidade];
+ }
 
 }
